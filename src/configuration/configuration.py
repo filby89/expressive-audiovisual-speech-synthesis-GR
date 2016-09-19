@@ -172,6 +172,8 @@ class configuration(object):
             ('in_mgc_dir'   , os.path.join(self.work_dir, 'data/mgc')  , 'Paths', 'in_mgc_dir'),
             ('in_lf0_dir'   , os.path.join(self.work_dir, 'data/lf0')  , 'Paths', 'in_lf0_dir'),
             ('in_bap_dir'   , os.path.join(self.work_dir, 'data/bap')  , 'Paths', 'in_bap_dir'),
+            ('in_sha_dir'   , os.path.join(self.work_dir, 'data/sha')  , 'Paths', 'in_sha_dir'),
+            ('in_tex_dir'   , os.path.join(self.work_dir, 'data/tex')  , 'Paths', 'in_tex_dir'),
             ('in_sp_dir'    , os.path.join(self.work_dir, 'data/sp' )  , 'Paths', 'in_sp_dir'),
             ('in_seglf0_dir', os.path.join(self.work_dir, 'data/lf03') , 'Paths', 'in_seglf0_dir'),
             
@@ -278,6 +280,10 @@ class configuration(object):
             ('dlf0_dim',1 * 3  ,'Outputs','dlf0'),
             ('bap_dim' ,25     ,'Outputs','bap'),
             ('dbap_dim',25 * 3 ,'Outputs','dbap'),
+            ('sha_dim' ,17     ,'Outputs','sha'),
+            ('dsha_dim',17 * 3 ,'Outputs','dsha'),
+            ('tex_dim' ,53     ,'Outputs','tex'),
+            ('dtex_dim',53 * 3 ,'Outputs','dtex'),
             ('cmp_dim'          ,(60 * 3) + 1 + (1 * 3) + (25 * 3) ,'Outputs','cmp'),
             ('stepw_dim'        , 55, 'Outputs', 'stepw_dim'),
             ('temp_sp_dim'      , 1025, 'Outputs', 'temp_sp_dim'),
@@ -389,6 +395,8 @@ class configuration(object):
             ('bap_ext'   , '.bap'     , 'Extensions', 'bap_ext'),
             ('lf0_ext'   , '.lf0'     , 'Extensions', 'lf0_ext'),
             ('cmp_ext'   , '.cmp'     , 'Extensions', 'cmp_ext'),
+            ('sha_ext'   , '.mfc'     , 'Extensions', 'sha_ext'),
+            ('tex_ext'   , '.mfc'     , 'Extensions', 'tex_ext'),
             ('lab_ext'   , '.lab'     , 'Extensions', 'lab_ext'),
             ('utt_ext'   , '.utt'     , 'Extensions', 'utt_ext'),
             ('stepw_ext' , '.stepw'   , 'Extensions', 'stepw_ext'),
@@ -546,6 +554,16 @@ class configuration(object):
                 out_dimension = self.dlf0_dim
                 in_directory  = self.in_lf0_dir
 
+            elif feature_name == 'sha':
+                in_dimension = self.sha_dim
+                out_dimension = self.dsha_dim
+                in_directory  = self.in_sha_dir
+
+            elif feature_name == 'tex':
+                in_dimension = self.tex_dim
+                out_dimension = self.dtex_dim
+                in_directory  = self.in_tex_dir
+
 #                current_stream_hidden_size = self.stream_lf0_hidden_size
 #                current_stream_weight      = self.stream_weight_lf0
             elif feature_name == 'vuv':
@@ -701,6 +719,8 @@ class configuration(object):
         self.file_extension_dict['mgc'] = self.mgc_ext
         self.file_extension_dict['lf0'] = self.lf0_ext
         self.file_extension_dict['bap'] = self.bap_ext
+        self.file_extension_dict['sha'] = self.sha_ext
+        self.file_extension_dict['tex'] = self.tex_ext
         self.file_extension_dict['stepw'] = self.stepw_ext
         self.file_extension_dict['cmp'] = self.cmp_ext
         self.file_extension_dict['seglf0'] = self.lf0_ext

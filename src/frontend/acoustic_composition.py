@@ -125,6 +125,9 @@ class   AcousticComposition(AcousticBase):
                 in_feature_dim = in_dimension_dict[data_stream_name]
                 features, frame_number = io_funcs.load_binary_file_frame(in_file_name, in_feature_dim)
 
+                logger.info(features.shape)
+                logger.info(frame_number)
+
                 if k == 0:
                     out_frame_number = frame_number
                     out_data_matrix = numpy.zeros((out_frame_number, self.out_dimension))
@@ -132,13 +135,24 @@ class   AcousticComposition(AcousticBase):
                 if frame_number > out_frame_number:
                     features = features[0:out_frame_number, ]
                     frame_number = out_frame_number
-                
-                try:
-                    assert  out_frame_number == frame_number
-                except AssertionError:
-                    logger.critical('the frame number of data stream %s is not consistent with others: current %d others %d' 
-                                         %(data_stream_name, out_frame_number, frame_number))
-                    raise
+
+                # try:
+                #     assert  out_frame_number == frame_number
+                # except AssertionError:
+                #     logger.critical('the frame number of data stream %s is not consistent with others: current %d others %d' 
+                #                          %(data_stream_name, out_frame_number, frame_number))
+                #     raise
+
+                # temporary solution: copy the last frame
+
+                if frame_number < out_frame_number:
+                    diff = out_frame_number - frame_number
+                    logger.debug(diff)
+                    diff_vec = features[-1, :]
+                    for counter in range(0, diff):
+                        features = numpy.vstack((features, diff_vec))
+                    logger.debug(features.shape)
+                    frame_number = out_frame_number
 
                 dim_index = stream_start_index[data_stream_name]
 
