@@ -243,8 +243,8 @@ fi
 echo "" >> $acoustic_config_file
 echo "" >> $acoustic_config_file
 echo "[Outputs]" >> $acoustic_config_file
-echo "mgc    : 60" >> $acoustic_config_file
-echo "dmgc   : 180" >> $acoustic_config_file
+echo "mgc    : 31" >> $acoustic_config_file
+echo "dmgc   : 93" >> $acoustic_config_file
 
 if [ "$Vocoder" == "STRAIGHT" ]
 then
