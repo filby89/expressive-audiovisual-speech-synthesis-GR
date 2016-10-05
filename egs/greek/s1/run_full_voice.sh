@@ -8,9 +8,9 @@ fi
 ### Step 1: setup directories and the training data files ###
 echo "Step 1: setting up experiments directory and the training data files..."
 global_config_file=conf/global_settings.cfg
-# ./scripts/setup.sh cvsp_ip
-# ./scripts/prepare_config_files.sh $global_config_file
-# ./scripts/prepare_config_files_for_synthesis.sh $global_config_file
+./scripts/setup.sh cvsp_ip
+./scripts/prepare_config_files.sh $global_config_file
+./scripts/prepare_config_files_for_synthesis.sh $global_config_file
 
 if [ ! -f  $global_config_file ]; then
     echo "Global config file doesn't exist"
@@ -28,11 +28,11 @@ fi
 # ./scripts/submit.sh ${MerlinDir}/src/run_merlin.py conf/acoustic_${Voice}.conf
 
 ### Step 4: synthesize speech   ###
-echo "Step 4: synthesizing speech..."
-./scripts/submit.sh ${MerlinDir}/src/run_merlin.py conf/test_dur_synth_${Voice}.conf
-./scripts/submit.sh ${MerlinDir}/src/run_merlin.py conf/test_synth_${Voice}.conf
+# echo "Step 4: synthesizing speech..."
+# ./scripts/submit.sh ${MerlinDir}/src/run_merlin.py conf/test_dur_synth_${Voice}.conf
+# ./scripts/submit.sh ${MerlinDir}/src/run_merlin.py conf/test_synth_${Voice}.conf
 
 
-echo "synthesized audio files are in: experiments/${Voice}/test_synthesis/wav"
-echo "All successfull!! Your full voice is ready :)"
+# echo "synthesized audio files are in: experiments/${Voice}/test_synthesis/wav"
+# echo "All successfull!! Your full voice is ready :)"
 

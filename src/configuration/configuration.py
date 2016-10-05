@@ -228,6 +228,8 @@ class configuration(object):
 
             ('sptk_bindir', 'tools/bin/SPTK-3.9', 'Paths','sptk'),
             ('straight_bindir', 'tools/bin/straight', 'Paths','straight'),
+            ('STRAIGHT_M_TRIAL_DIR', '', 'Paths','STRAIGHT_M_TRIAL_DIR'),
+            ('MATLAB_DIR', '', 'Paths','MATLAB_DIR'),
             ('world_bindir', 'tools/bin/WORLD', 'Paths','world'),
 
             ('network_type'           , 'RNN'                                           , 'Architecture', 'network_type'),
@@ -319,6 +321,7 @@ class configuration(object):
 
             ('output_features' , ['mgc','lf0', 'vuv', 'bap'], 'Streams', 'output_features'),
             ('gen_wav_features', ['mgc', 'bap', 'lf0']      , 'Streams', 'gen_wav_features'),
+            ('gen_face_features', ['sha', 'tex']      , 'Streams', 'gen_face_features'),
 
 #            ('stream_mgc_hidden_size'   ,  192 , 'Streams', 'stream_mgc_hidden_size'),
 #            ('stream_lf0_hidden_size'   ,  32  , 'Streams', 'stream_lf0_hidden_size'),
@@ -365,7 +368,7 @@ class configuration(object):
             ('vocoder_type'     ,'STRAIGHT'            ,'Waveform'  , 'vocoder_type'),
             ('sr'               ,16000                 ,'Waveform'  , 'samplerate'),
             ('fl'               ,1024                  ,'Waveform'  , 'framelength'),
-            ('shift'            ,1000 * 240 / 16000    ,'Waveform'  , 'frameshift'),
+            ('shift'            ,16000 * 0.005    ,'Waveform'  , 'frameshift'),
             ('sp_dim'           ,(1024 / 2) + 1        ,'Waveform'  , 'sp_dim'),
             # fw_alpha: 'Bark' or 'ERB' allowing deduction of alpha, or explicity float value (e.g. 0.77)
             ('fw_alpha'         ,0.42                  ,'Waveform'  , 'fw_alpha'),
@@ -497,6 +500,11 @@ class configuration(object):
 #            }
         self.STRAIGHT = {
             'SYNTHESIS_FFT' : os.path.join(self.straight_bindir, 'synthesis_fft'),
+            'BNDAP2AP'      : os.path.join(self.straight_bindir, 'bndap2ap'),
+            }
+
+        self.STRAIGHT_TRIAL = {
+            '' : os.path.join(self.straight_bindir, 'synthesis_fft'),
             'BNDAP2AP'      : os.path.join(self.straight_bindir, 'bndap2ap'),
             }
 

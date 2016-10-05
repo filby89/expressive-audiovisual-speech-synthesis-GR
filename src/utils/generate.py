@@ -226,7 +226,7 @@ def generate_wav(gen_dir, file_id_list, cfg):
 
             mgc_file_name = files['mgc']+'_p_mgc'
             
-        if cfg.vocoder_type == "STRAIGHT" and cfg.apply_GV:
+        if (cfg.vocoder_type == "STRAIGHT" or cfg.vocoder_type == "STRAIGHT_M_TRIAL") and cfg.apply_GV:
             gen_mgc, frame_number = io_funcs.load_binary_file_frame(mgc_file_name, cfg.mgc_dim)
 
             gen_mu  = np.reshape(np.mean(gen_mgc, axis=0), (-1, 1))
@@ -264,6 +264,51 @@ def generate_wav(gen_dir, file_id_list, cfg):
 
             run_process('rm -f {sp} {f0} {f0a} {ap}'
                         .format(sp=files['sp'],f0=files['f0'],f0a=files['f0']+'.a',ap=files['ap']))
+        ###mgc to sp to wav
+        if cfg.vocoder_type == 'STRAIGHT_M_TRIAL':
+            run_process('{mgc2sp} -a {alpha} -g 0 -m {order} -l {fl} -o 2 {mgc} > {sp}'
+                        .format(mgc2sp=SPTK['MGC2SP'], alpha=cfg.fw_alpha, order=cfg.mgc_dim-1, fl=cfg.fl, mgc=mgc_file_name, sp=files['sp']))
+            run_process('{sopr} -magic -1.0E+10 -EXP -MAGIC 0.0 {lf0} > {f0}'.format(sopr=SPTK['SOPR'], lf0=files['lf0'], f0=files['f0']))
+            run_process('{x2x} +fa {f0} > {f0a}'.format(x2x=SPTK['X2X'], f0=files['f0'], f0a=files['f0'] + '.a'))
+
+            if cfg.use_cep_ap:
+                run_process('{mgc2sp} -a {alpha} -g 0 -m {order} -l {fl} -o 0 {bap} > {ap}'
+                            .format(mgc2sp=SPTK['MGC2SP'], alpha=cfg.fw_alpha, order=cfg.bap_dim-1, fl=cfg.fl, bap=files['bap'], ap=files['ap']))
+            else:
+                run_process('{bndap2ap} {bap} > {ap}' 
+                             .format(bndap2ap=STRAIGHT['BNDAP2AP'], bap=files['bap'], ap=files['ap']))
+
+
+            # added by filntisis 5/10/2016
+            # copied from hts
+
+            synth_straight_file_name = base + '_synth.m'
+            synth_straight_file = open(synth_straight_file_name, "w")
+            synth_straight_file.write "path(path,'%s');\n" % cfg.STRAIGHT_M_TRIAL_DIR
+            synth_straight_file.write "prm.spectralUpdateInterval = %f;\n" % 1000.0 * cfg.fs / cfg.sr;
+            synth_straight_file.write "prm.levelNormalizationIndicator = 0;\n\n"
+            synth_straight_file.write "fprintf(1,'\\nSynthesizing %s\\n');\n"% files['wav']
+            synth_straight_file.write "fid1 = fopen('%s','r','%s');\n"%        (files['sp'], "ieee-le")
+            synth_straight_file.write "fid2 = fopen('%s','r','%s');\n"%        (files['ap'], "ieee-le")
+            synth_straight_file.write "fid3 = fopen('%s','r','%s');\n"%        (files['f0'], "ieee-le")
+            synth_straight_file.write "sp = fread(fid1,[%d, %d],'float');\n" % (513, size) 
+            synth_straight_file.write "ap = fread(fid2,[%d, %d],'float');\n" % (513, size)
+            synth_straight_file.write "f0 = fread(fid3,[%d, %d],'float');\n" % (1, size)
+            synth_straight_file.write "fclose(fid1);\n"
+            synth_straight_file.write "fclose(fid2);\n"
+            synth_straight_file.write "fclose(fid3);\n"
+            synth_straight_file.write "sp = sp/32768.0;\n"
+            synth_straight_file.write "[sy] = exstraightsynth(f0,sp,ap,%d,prm);\n" % cfg.sr
+            synth_straight_file.write "wavwrite( sy, %d, '%s');\n\n" % (cfg.sr, files['wav'])
+            synth_straight_file.write "quit;\n"
+            
+            synth_straight_file.close()
+
+            run_process("%s < %s" % cfg.MATLAB_DIR, synth_straight_file_name)
+
+#            run_process('rm -f {sp} {f0} {f0a} {ap}'
+ #                       .format(sp=files['sp'],f0=files['f0'],f0a=files['f0']+'.a',ap=files['ap']))
+  
         elif cfg.vocoder_type == 'WORLD':        
 
             run_process('{sopr} -magic -1.0E+10 -EXP -MAGIC 0.0 {lf0} | {x2x} +fd > {f0}'.format(sopr=SPTK['SOPR'], lf0=files['lf0'], x2x=SPTK['X2X'], f0=files['f0']))        
