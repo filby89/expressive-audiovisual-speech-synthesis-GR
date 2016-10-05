@@ -363,12 +363,12 @@ class configuration(object):
 #            ('stream_vuv_lr'       , 0.5, 'Streams', 'stream_vuv_lr'),
 
             ('vocoder_type'     ,'STRAIGHT'            ,'Waveform'  , 'vocoder_type'),
-            ('sr'               ,48000                 ,'Waveform'  , 'samplerate'),
-            ('fl'               ,4096                  ,'Waveform'  , 'framelength'),
-            ('shift'            ,1000 * 240 / 48000    ,'Waveform'  , 'frameshift'),
-            ('sp_dim'           ,(4096 / 2) + 1        ,'Waveform'  , 'sp_dim'),
+            ('sr'               ,16000                 ,'Waveform'  , 'samplerate'),
+            ('fl'               ,1024                  ,'Waveform'  , 'framelength'),
+            ('shift'            ,1000 * 240 / 16000    ,'Waveform'  , 'frameshift'),
+            ('sp_dim'           ,(1024 / 2) + 1        ,'Waveform'  , 'sp_dim'),
             # fw_alpha: 'Bark' or 'ERB' allowing deduction of alpha, or explicity float value (e.g. 0.77)
-            ('fw_alpha'         ,0.77                  ,'Waveform'  , 'fw_alpha'),
+            ('fw_alpha'         ,0.42                  ,'Waveform'  , 'fw_alpha'),
             ('pf_coef'          ,1.4                   ,'Waveform'  , 'postfilter_coef'),
             ('co_coef'          ,2047                  ,'Waveform'  , 'minimum_phase_order'),
             ('use_cep_ap'       ,True                  ,'Waveform'  , 'use_cep_ap'),
