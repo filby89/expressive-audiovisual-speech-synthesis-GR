@@ -20,8 +20,8 @@ else
 fi
 
 # Step 2: train duration model ###
-#echo "Step 2: training duration model..."
-#./scripts/submit.sh ${MerlinDir}/src/run_merlin.py conf/duration_${Voice}.conf
+echo "Step 2: training duration model..."
+./scripts/submit.sh ${MerlinDir}/src/run_merlin.py conf/duration_${Voice}.conf
 
 ## Step 3: train acoustic model ###
 echo "Step 3: training acoustic model..."

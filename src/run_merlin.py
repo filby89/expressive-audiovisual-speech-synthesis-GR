@@ -321,6 +321,7 @@ def train_DNN(train_xy_file_list, valid_xy_file_list, \
             plotlogger.save_plot('training convergence',title='Progress of training and validation error',xlabel='epochs',ylabel='error')
 
         if this_validation_loss < best_validation_loss:
+            # changed from 5 in order to save even if training fails
             if epoch > 1:
                 cPickle.dump(best_dnn_model, open(nnets_file_name, 'wb'))
 

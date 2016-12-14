@@ -419,9 +419,14 @@ class configuration(object):
             ('dtexture_dim',53 * 3 ,'Outputs','dtexture'),
             ('shape_ext'   , '.mfc'     , 'Extensions', 'shape_ext'),
             ('texture_ext'   , '.mfc'     , 'Extensions', 'texture_ext'),
+            ('visual'   , False     , 'Visual Utilities', 'visual'),
+            ('addhtkheader'   , ''    , 'Visual Utilities', 'addhtkheader'),
+            ('aam_tools_path'   , ''    , 'Visual Utilities', 'aam_tools_path'),
+            ('aam_tools_extra_scripts'   , ''    , 'Visual Utilities', 'aam_tools_extra_scripts'),
+            ('aam_model'   , ''    , 'Visual Utilities', 'aam_model'),
+
 
         ]
-
 
         # this uses exec(...) which is potentially dangerous since arbitrary code could be executed
         for (variable,default,section,option) in user_options:

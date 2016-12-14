@@ -182,8 +182,8 @@ def generate_wav(gen_dir, file_id_list, cfg):
                  'lf0' : base + cfg.lf0_ext,
                  'ap'  : base + '.ap',
                  'bap' : base + cfg.bap_ext,
-                 'sha' : base + cfg.sha_ext,
-                 'tex' : base + cfg.tex_ext,
+                 'shape' : base + cfg.shape_ext,
+                 'texture' : base + cfg.texture_ext,
                  'wav' : base + '.wav'}
 
         mgc_file_name = files['mgc']
@@ -266,7 +266,9 @@ def generate_wav(gen_dir, file_id_list, cfg):
 
             run_process('rm -f {sp} {f0} {f0a} {ap}'
                         .format(sp=files['sp'],f0=files['f0'],f0a=files['f0']+'.a',ap=files['ap']))
+        
         ###mgc to sp to wav
+        # add for straight trial version (MATLAB)
         if cfg.vocoder_type == 'STRAIGHT_M_TRIAL':
             run_process('{mgc2sp} -a {alpha} -g 0 -m {order} -l {fl} -o 2 {mgc} > {sp}'
                         .format(mgc2sp=SPTK['MGC2SP'], alpha=cfg.fw_alpha, order=cfg.mgc_dim-1, fl=cfg.fl, mgc=mgc_file_name, sp=files['sp']))
@@ -303,8 +305,9 @@ def generate_wav(gen_dir, file_id_list, cfg):
             synth_straight_file.write("fclose(fid1);\n")
             synth_straight_file.write("fclose(fid2);\n")
             synth_straight_file.write("fclose(fid3);\n")
-#            synth_straight_file.write("sp = sp/32768.0;\n")
-            synth_straight_file.write("sp = sp*(%f);\n" % straight_normalization)    # normalization for STRAIGHT (sdev of amplitude is set to 1024)         printf SYN "wavwrite( sy, %d, '%s');\n\n", $sr, "$gendir/$base.wav";
+            
+            synth_straight_file.write("sp = sp/32768.0;\n") # we use this normalization now
+            # synth_straight_file.write("sp = sp*(%f);\n" % straight_normalization)    # normalization for STRAIGHT (sdev of amplitude is set to 1024)         printf SYN "wavwrite( sy, %d, '%s');\n\n", $sr, "$gendir/$base.wav";
 
             synth_straight_file.write("[sy] = exstraightsynth(f0,sp,ap,%d,prm);\n" % cfg.sr)
             synth_straight_file.write("wavwrite( sy, %d, '%s');\n\n" % (cfg.sr, files['wav']))
@@ -314,32 +317,35 @@ def generate_wav(gen_dir, file_id_list, cfg):
 
             run_process("%s < %s" % (cfg.MATLAB_COMMAND, synth_straight_file_name))
 
+        if cfg.visual == True:
 
         #   generate talking head
-            # synth_straight_file_name = base + '_vid_synth.m'
-            # synth_straight_file = open(synth_straight_file_name, "w")
+            synth_straight_file_name = base + '_vid_synth.m'
+            synth_straight_file = open(synth_straight_file_name, "w")
 
-            # bytes_per_frame_shape = cfg.sha_dim * 4
-            # output_name_shape = base + '.sha_h'
-            # run_process('/usr/bin/perl /home/filby/workspace/phd/audiovisual_speech_synthesis/data/scripts/addhtkheader.pl %d %d %d 9 %s > %s' % (cfg.sr, cfg.shift, bytes_per_frame_shape, files['sha'], output_name_shape))
+            bytes_per_frame_shape = cfg.shape_dim * 4
+            output_name_shape = base + '.sha_h'
+            run_process('/usr/bin/perl %s %d %d %d 9 %s > %s' % (cfg.addhtkheader, cfg.sr, cfg.shift, bytes_per_frame_shape, files['shape'], output_name_shape))
 
-            # bytes_per_frame_texture = cfg.tex_dim * 4
-            # output_name_texture = base + '.tex_h'
-            # run_process('/usr/bin/perl /home/filby/workspace/phd/audiovisual_speech_synthesis/data/scripts/addhtkheader.pl %d %d %d 9 %s > %s' % (cfg.sr, cfg.shift, bytes_per_frame_texture, files['tex'], output_name_texture))
+            bytes_per_frame_texture = cfg.texture_dim * 4
+            output_name_texture = base + '.tex_h'
+            run_process('/usr/bin/perl %s %d %d %d 9 %s > %s' % (cfg.addhtkheader, cfg.sr, cfg.shift, bytes_per_frame_texture, files['tex'], output_name_texture))
 
-            # synth_straight_file.write("cd /home/filby/workspace/phd/audiovisual_speech_synthesis/visual_data/aam-tools;\n")
-            # synth_straight_file.write("addAamPaths;\n")
-            # synth_straight_file.write("addpath /home/filby/workspace/phd/audiovisual_speech_synthesis/visual_data/aam-tools/filby/scripts\n")
-            # synth_straight_file.write("params.num_sh = %d;\n" % cfg.sha_dim)
-            # synth_straight_file.write("params.num_te = %d;\n" % cfg.tex_dim)
-            # synth_straight_file.write("params.fps = %f;\n" % 29.97)
-            # synth_straight_file.write("figure('Visible','Off')\n")
-            # synth_straight_file.write("convert_to_vid_divided('%s', '%s', '%s', '%s', '%s', '%s', params);\n" % ("/home/filby/workspace/phd/audiovisual_speech_synthesis/visual_data/aam-tools/filby/trained_models/neutral/25SOSLATEST.mat", os.path.join(gen_dir, output_name_shape), os.path.join(gen_dir, output_name_texture), os.path.join(gen_dir, (base + '.wav')), os.path.join(gen_dir, (base + '.mkv')), gen_dir))
-            # synth_straight_file.write("quit;\n")
+            synth_straight_file.write("cd %s;\n" % cfg.aam_tools_path)
+            synth_straight_file.write("addAamPaths;\n")
+            synth_straight_file.write("addpath %s\n" % cfg.aam_tools_extra_scripts)
+            synth_straight_file.write("params.num_sh = %d;\n" % cfg.shape_dim)
+            synth_straight_file.write("params.num_te = %d;\n" % cfg.texture_dim)
+            synth_straight_file.write("params.fps = %f;\n" % 29.97)
+            synth_straight_file.write("figure('Visible','Off')\n")
+            synth_straight_file.write("convert_to_vid_divided('%s', '%s', '%s', '%s', '%s', '%s', params);\n" % (cfg.aam_model, os.path.join(gen_dir, output_name_shape), os.path.join(gen_dir, output_name_texture), os.path.join(gen_dir, (base + '.wav')), os.path.join(gen_dir, (base + '.mkv')), gen_dir))
+            synth_straight_file.write("quit;\n")
 
+            synth_straight_file.close()
 
-            # run_process("%s < %s" % ('/usr/local/MATLAB/MATLAB_Production_Server/R2015a/bin/matlab', synth_straight_file_name))
+            run_process("%s < %s" % (cfg.MATLAB_COMMAND_V, synth_straight_file_name))
 
+            # no removerino
 #            run_process('rm -f {sp} {f0} {f0a} {ap}'
  #                       .format(sp=files['sp'],f0=files['f0'],f0a=files['f0']+'.a',ap=files['ap']))
   
