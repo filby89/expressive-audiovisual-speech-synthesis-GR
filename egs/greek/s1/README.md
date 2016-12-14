@@ -24,3 +24,11 @@ Full voice utilizes the whole arctic data (1132 utterances). The training of the
 
 Compare the results in log files to baseline results from full data in [RESULTS.md](https://github.com/CSTR-Edinburgh/merlin/blob/master/egs/slt_arctic/s1/RESULTS.md)
 
+Generate new sentences
+----------------------
+
+To generate new sentences, please follow below steps:
+
+Step 1: Run either demo voice or full voice. <br/>
+Step 2: ./merlin_synthesis.sh
+

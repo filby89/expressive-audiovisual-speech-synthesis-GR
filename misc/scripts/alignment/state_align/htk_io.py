@@ -101,7 +101,10 @@ class HTK_Parm_IO(object):
             self.samp_period = struct.unpack('<I', f.read(4))[0]    
             self.samp_size = struct.unpack('<H', f.read(2))[0]
             self.param_kind = struct.unpack('<H', f.read(2))[0]
-             
+
+            print   self.n_samples, self.samp_size
+            print   self.param_kind, self._C             
+
             if (self.htk_datatype_has_option(self._C)):
                 #TODO compression
                 #self.A = struct.unpack('>H', f.read(2))[0]
@@ -116,9 +119,9 @@ class HTK_Parm_IO(object):
                 if reshape_to_matrix:
                     self.data = self.data.reshape( (self.n_samples, -1) )
             
-#            if(sys.byteorder=='little'):
+            if(sys.byteorder=='little'):
 #                print   "hello"
-#                self.data.byteswap(True) # forces big-endian byte ordering
+                self.data.byteswap(True) # forces big-endian byte ordering
             
             f.close()
         except IOError as e:
@@ -134,13 +137,13 @@ class HTK_Parm_IO(object):
             
             file = open(filename, 'wb')
             
-            file.write(struct.pack('<I', self.n_samples))
-            file.write(struct.pack('<I', self.samp_period))
-            file.write(struct.pack('<H', self.samp_size))
-            file.write(struct.pack('<H', self.param_kind))
+            file.write(struct.pack('>I', self.n_samples))
+            file.write(struct.pack('>I', self.samp_period))
+            file.write(struct.pack('>H', self.samp_size))
+            file.write(struct.pack('>H', self.param_kind))
             
-            #if(sys.byteorder=='little'):
-            #    self.data.byteswap(True) # force big-endian byte ordering
+            if(sys.byteorder=='little'):
+                self.data.byteswap(True) # force big-endian byte ordering
             
             self.data.tofile(file)
 
