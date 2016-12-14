@@ -182,6 +182,8 @@ def generate_wav(gen_dir, file_id_list, cfg):
                  'lf0' : base + cfg.lf0_ext,
                  'ap'  : base + '.ap',
                  'bap' : base + cfg.bap_ext,
+                 'sha' : base + cfg.sha_ext,
+                 'tex' : base + cfg.tex_ext,
                  'wav' : base + '.wav'}
 
         mgc_file_name = files['mgc']
@@ -282,29 +284,61 @@ def generate_wav(gen_dir, file_id_list, cfg):
             # added by filntisis 5/10/2016
             # copied from hts
 
+            size = os.path.getsize(files['f0'])
+            straight_normalization = 1024.0 / ( 2200.0 * 32768.0 )
+
+            spectralUpdateInterval = 1000.0 * cfg.shift / cfg.sr
             synth_straight_file_name = base + '_synth.m'
             synth_straight_file = open(synth_straight_file_name, "w")
-            synth_straight_file.write "path(path,'%s');\n" % cfg.STRAIGHT_M_TRIAL_DIR
-            synth_straight_file.write "prm.spectralUpdateInterval = %f;\n" % 1000.0 * cfg.fs / cfg.sr;
-            synth_straight_file.write "prm.levelNormalizationIndicator = 0;\n\n"
-            synth_straight_file.write "fprintf(1,'\\nSynthesizing %s\\n');\n"% files['wav']
-            synth_straight_file.write "fid1 = fopen('%s','r','%s');\n"%        (files['sp'], "ieee-le")
-            synth_straight_file.write "fid2 = fopen('%s','r','%s');\n"%        (files['ap'], "ieee-le")
-            synth_straight_file.write "fid3 = fopen('%s','r','%s');\n"%        (files['f0'], "ieee-le")
-            synth_straight_file.write "sp = fread(fid1,[%d, %d],'float');\n" % (513, size) 
-            synth_straight_file.write "ap = fread(fid2,[%d, %d],'float');\n" % (513, size)
-            synth_straight_file.write "f0 = fread(fid3,[%d, %d],'float');\n" % (1, size)
-            synth_straight_file.write "fclose(fid1);\n"
-            synth_straight_file.write "fclose(fid2);\n"
-            synth_straight_file.write "fclose(fid3);\n"
-            synth_straight_file.write "sp = sp/32768.0;\n"
-            synth_straight_file.write "[sy] = exstraightsynth(f0,sp,ap,%d,prm);\n" % cfg.sr
-            synth_straight_file.write "wavwrite( sy, %d, '%s');\n\n" % (cfg.sr, files['wav'])
-            synth_straight_file.write "quit;\n"
+            synth_straight_file.write("path(path,'%s');\n" % cfg.STRAIGHT_M_TRIAL_DIR)
+            synth_straight_file.write("prm.spectralUpdateInterval = %f;\n" % spectralUpdateInterval)
+            synth_straight_file.write("prm.levelNormalizationIndicator = 0;\n\n")
+            synth_straight_file.write("fprintf(1,'\\nSynthesizing %s\\n');\n"% files['wav'])
+            synth_straight_file.write("fid1 = fopen('%s','r','%s');\n"%        (files['sp'], "ieee-le"))
+            synth_straight_file.write("fid2 = fopen('%s','r','%s');\n"%        (files['ap'], "ieee-le"))
+            synth_straight_file.write("fid3 = fopen('%s','r','%s');\n"%        (files['f0'], "ieee-le"))
+            synth_straight_file.write("sp = fread(fid1,[%d, %d],'float');\n" % (513, size) )
+            synth_straight_file.write("ap = fread(fid2,[%d, %d],'float');\n" % (513, size))
+            synth_straight_file.write("f0 = fread(fid3,[%d, %d],'float');\n" % (1, size))
+            synth_straight_file.write("fclose(fid1);\n")
+            synth_straight_file.write("fclose(fid2);\n")
+            synth_straight_file.write("fclose(fid3);\n")
+#            synth_straight_file.write("sp = sp/32768.0;\n")
+            synth_straight_file.write("sp = sp*(%f);\n" % straight_normalization)    # normalization for STRAIGHT (sdev of amplitude is set to 1024)         printf SYN "wavwrite( sy, %d, '%s');\n\n", $sr, "$gendir/$base.wav";
+
+            synth_straight_file.write("[sy] = exstraightsynth(f0,sp,ap,%d,prm);\n" % cfg.sr)
+            synth_straight_file.write("wavwrite( sy, %d, '%s');\n\n" % (cfg.sr, files['wav']))
+            synth_straight_file.write("quit;\n")
             
             synth_straight_file.close()
 
-            run_process("%s < %s" % cfg.MATLAB_DIR, synth_straight_file_name)
+            run_process("%s < %s" % (cfg.MATLAB_COMMAND, synth_straight_file_name))
+
+
+        #   generate talking head
+            # synth_straight_file_name = base + '_vid_synth.m'
+            # synth_straight_file = open(synth_straight_file_name, "w")
+
+            # bytes_per_frame_shape = cfg.sha_dim * 4
+            # output_name_shape = base + '.sha_h'
+            # run_process('/usr/bin/perl /home/filby/workspace/phd/audiovisual_speech_synthesis/data/scripts/addhtkheader.pl %d %d %d 9 %s > %s' % (cfg.sr, cfg.shift, bytes_per_frame_shape, files['sha'], output_name_shape))
+
+            # bytes_per_frame_texture = cfg.tex_dim * 4
+            # output_name_texture = base + '.tex_h'
+            # run_process('/usr/bin/perl /home/filby/workspace/phd/audiovisual_speech_synthesis/data/scripts/addhtkheader.pl %d %d %d 9 %s > %s' % (cfg.sr, cfg.shift, bytes_per_frame_texture, files['tex'], output_name_texture))
+
+            # synth_straight_file.write("cd /home/filby/workspace/phd/audiovisual_speech_synthesis/visual_data/aam-tools;\n")
+            # synth_straight_file.write("addAamPaths;\n")
+            # synth_straight_file.write("addpath /home/filby/workspace/phd/audiovisual_speech_synthesis/visual_data/aam-tools/filby/scripts\n")
+            # synth_straight_file.write("params.num_sh = %d;\n" % cfg.sha_dim)
+            # synth_straight_file.write("params.num_te = %d;\n" % cfg.tex_dim)
+            # synth_straight_file.write("params.fps = %f;\n" % 29.97)
+            # synth_straight_file.write("figure('Visible','Off')\n")
+            # synth_straight_file.write("convert_to_vid_divided('%s', '%s', '%s', '%s', '%s', '%s', params);\n" % ("/home/filby/workspace/phd/audiovisual_speech_synthesis/visual_data/aam-tools/filby/trained_models/neutral/25SOSLATEST.mat", os.path.join(gen_dir, output_name_shape), os.path.join(gen_dir, output_name_texture), os.path.join(gen_dir, (base + '.wav')), os.path.join(gen_dir, (base + '.mkv')), gen_dir))
+            # synth_straight_file.write("quit;\n")
+
+
+            # run_process("%s < %s" % ('/usr/local/MATLAB/MATLAB_Production_Server/R2015a/bin/matlab', synth_straight_file_name))
 
 #            run_process('rm -f {sp} {f0} {f0a} {ap}'
  #                       .format(sp=files['sp'],f0=files['f0'],f0a=files['f0']+'.a',ap=files['ap']))

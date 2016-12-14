@@ -198,7 +198,7 @@ echo "log_file: %(work)s/log/mylogfilename.log" >> $acoustic_config_file
 echo "" >> $acoustic_config_file
 echo "# where are my tools" >> $acoustic_config_file
 echo "sptk:  /usr/local/bin" >> $acoustic_config_file
-echo "MATLAB_COMMAND: $matlab_command" >> $acoustic_config_file
+echo "MATLAB_COMMAND: /usr/local/MATLAB/MATLAB_Production_Server/R2015a/bin/matlab -nodisplay -nosplash -nojvm" >> $acoustic_config_file
 
 
 if [ "$Vocoder" == "STRAIGHT" ] 
@@ -206,7 +206,7 @@ then
     echo "straight :%(Merlin)s/tools/straight/bin" >> $acoustic_config_file
 elif [ "$Vocoder" == "STRAIGHT_M_TRIAL" ]
 then
-    echo "straight: $STRAIGHT_M_TRIAL_DIR" >> $acoustic_config_file
+    echo "STRAIGHT_M_TRIAL_DIR: $STRAIGHT_M_TRIAL_DIR" >> $acoustic_config_file
     echo "sp_dim: 513" >> $acoustic_config_file
     echo "fw_alpha: 0.42" >> $acoustic_config_file
 elif [ "$Vocoder" == "WORLD" ]
@@ -244,36 +244,40 @@ fi
 echo "" >> $acoustic_config_file
 echo "" >> $acoustic_config_file
 echo "[Outputs]" >> $acoustic_config_file
-echo "mgc    : 31" >> $acoustic_config_file
-echo "dmgc   : 93" >> $acoustic_config_file
 
-if [ "$Vocoder" == "STRAIGHT" || "$Vocoder" == "STRAIGHT_M" ]
+if [ "$Audio" == true ]
 then
-    echo "bap    : 25" >> $acoustic_config_file
-    echo "dbap   : 75" >> $acoustic_config_file
-elif [ "$Vocoder" == "WORLD" ]
-then
-    if [ "$SamplingFreq" == "16000" ]
+    echo "mgc    : 31" >> $acoustic_config_file
+    echo "dmgc   : 93" >> $acoustic_config_file
+
+    if [ "$Vocoder" == "STRAIGHT" ] || [ "$Vocoder" == "STRAIGHT_M_TRIAL" ]
     then
-        echo "bap    : 1" >> $acoustic_config_file
-        echo "dbap   : 3" >> $acoustic_config_file
-    elif [ "$SamplingFreq" == "48000" ]
+        echo "bap    : 25" >> $acoustic_config_file
+        echo "dbap   : 75" >> $acoustic_config_file
+    elif [ "$Vocoder" == "WORLD" ]
     then
-        echo "bap    : 5" >> $acoustic_config_file
-        echo "dbap   : 15" >> $acoustic_config_file
+        if [ "$SamplingFreq" == "16000" ]
+        then
+            echo "bap    : 1" >> $acoustic_config_file
+            echo "dbap   : 3" >> $acoustic_config_file
+        elif [ "$SamplingFreq" == "48000" ]
+        then
+            echo "bap    : 5" >> $acoustic_config_file
+            echo "dbap   : 15" >> $acoustic_config_file
+        fi
     fi
+
+    echo "lf0    : 1" >> $acoustic_config_file
+    echo "dlf0   : 3" >> $acoustic_config_file
 fi
 
-echo "lf0    : 1" >> $acoustic_config_file
-echo "dlf0   : 3" >> $acoustic_config_file
-
-if [ "Visual" == true]
+if [ "$Visual" == true ]
 then
-    echo "tex    : 17" >> $acoustic_config_file
-    echo "dtex    : 51" >> $acoustic_config_file
+    echo "tex    : 53" >> $acoustic_config_file
+    echo "dtex    : 159" >> $acoustic_config_file
 
-    echo "sha    : 53" >> $acoustic_config_file
-    echo "dsha    : 159" >> $acoustic_config_file
+    echo "sha    : 17" >> $acoustic_config_file
+    echo "dsha    : 51" >> $acoustic_config_file
 fi
 
 echo "" >> $acoustic_config_file
@@ -286,7 +290,7 @@ if [ "$SamplingFreq" == "16000" ]
 then
     echo "samplerate : 16000" >> $acoustic_config_file
     echo "framelength : 1024" >> $acoustic_config_file
-    echo "fw_alpha : 0.58" >> $acoustic_config_file
+    echo "fw_alpha : 0.42" >> $acoustic_config_file
     echo "minimum_phase_order : 511" >> $acoustic_config_file
 elif [ "$SamplingFreq" == "48000" ]
 then

@@ -9,6 +9,8 @@ current_working_dir=$(pwd)
 merlin_dir=$(dirname $(dirname $(dirname $current_working_dir)))
 experiments_dir=${current_working_dir}/experiments
 
+matlab_terminal='/usr/local/MATLAB/MATLAB_Production_Server/R2015a/bin -nodisplay -nosplash -nojvm'
+
 voice_name=$1
 voice_dir=${experiments_dir}/${voice_name}
 
@@ -21,7 +23,7 @@ mkdir -p ${voice_dir}
 mkdir -p ${acoustic_dir}
 mkdir -p ${duration_dir}
 
-data_dir=cvsp_ip_data
+data_dir=cvsp_ip_data_happy
 
 
 cp -r ${data_dir}/merlin_baseline_practice/acoustic_data/label_phone_align ${duration_dir}/data
@@ -43,13 +45,13 @@ echo "QuestionFile=questions-greek.hed" >> $global_config_file
 echo "Vocoder=STRAIGHT_M_TRIAL" >> $global_config_file
 echo "SamplingFreq=16000" >> $global_config_file
 echo "Audio=true" >> $global_config_file
-echo "Visual=true" >> $global_config_file
-echo "STRAIGHT_M_TRIAL_DIR='/home/filby/workspace/phd/audiovisual_speech_synthesis/STRAIGHTtrial/Resources/STRAIGHTV40pcode'"
+echo "Visual=false" >> $global_config_file
+echo "STRAIGHT_M_TRIAL_DIR=/home/filby/workspace/phd/audiovisual_speech_synthesis/STRAIGHTtrial/Resources/STRAIGHTV40pcode" >> $global_config_file
 echo "FileIDList=file_id_list_full.scp" >> $global_config_file
 echo "Train=800" >> $global_config_file 
 echo "Valid=47" >> $global_config_file 
 echo "Test=48" >> $global_config_file 
-echo "matlab_command='/usr/local/MATLAB/MATLAB_Production_Server/R2015a/bin -nodisplay -nosplash -nojvm'"
+echo "matlab_command=${matlab_terminal}" $global_config_file
 
 echo "Merlin default voice settings configured in $global_config_file"
 echo "setup done...!"

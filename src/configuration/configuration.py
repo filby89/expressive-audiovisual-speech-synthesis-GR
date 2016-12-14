@@ -228,8 +228,8 @@ class configuration(object):
 
             ('sptk_bindir', 'tools/bin/SPTK-3.9', 'Paths','sptk'),
             ('straight_bindir', 'tools/bin/straight', 'Paths','straight'),
-            ('STRAIGHT_M_TRIAL_DIR', '', 'Paths','STRAIGHT_M_TRIAL_DIR'),
-            ('MATLAB_DIR', '', 'Paths','MATLAB_DIR'),
+            ('STRAIGHT_M_TRIAL_DIR', 'STRAIGHT_M_TRIAL_DIR', 'Paths','STRAIGHT_M_TRIAL_DIR'),
+            ('MATLAB_COMMAND', 'MATLAB_COMMAND', 'Paths','MATLAB_COMMAND'),
             ('world_bindir', 'tools/bin/WORLD', 'Paths','world'),
 
             ('network_type'           , 'RNN'                                           , 'Architecture', 'network_type'),
