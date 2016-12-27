@@ -123,10 +123,13 @@ class   AcousticComposition(AcousticBase):
                 in_file_name = in_file_list_dict[data_stream_name][i]
 
                 in_feature_dim = in_dimension_dict[data_stream_name]
+
+                logger.info(in_file_name)
+                logger.info(in_feature_dim)
+
                 features, frame_number = io_funcs.load_binary_file_frame(in_file_name, in_feature_dim)
 
-                logger.info(features.shape)
-                logger.info(frame_number)
+                # logger.info(frame_number)
 
                 if k == 0:
                     out_frame_number = frame_number

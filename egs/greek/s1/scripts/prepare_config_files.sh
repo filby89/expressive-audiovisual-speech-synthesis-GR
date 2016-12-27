@@ -181,6 +181,8 @@ echo "" >> $acoustic_config_file
 echo "in_mgc_dir: %(data)s/mgc" >> $acoustic_config_file
 echo "in_bap_dir: %(data)s/bap" >> $acoustic_config_file
 echo "in_lf0_dir: %(data)s/lf0" >> $acoustic_config_file
+echo "in_shape_dir: %(data)s/shape" >> $acoustic_config_file
+echo "in_texture_dir: %(data)s/texture" >> $acoustic_config_file
 
 echo "" >> $acoustic_config_file
 echo "# where to save log" >> $acoustic_config_file
@@ -197,9 +199,15 @@ echo "log_file: %(work)s/log/mylogfilename.log" >> $acoustic_config_file
 
 echo "" >> $acoustic_config_file
 echo "# where are my tools" >> $acoustic_config_file
-echo "sptk:  /usr/local/bin" >> $acoustic_config_file
-echo "MATLAB_COMMAND: /usr/local/MATLAB/MATLAB_Production_Server/R2015a/bin/matlab -nodisplay -nosplash -nojvm" >> $acoustic_config_file
+echo "sptk:  /usr/local/SPTK-3.9/bin" >> $acoustic_config_file
+echo "MATLAB_COMMAND: $MATLAB" >> $acoustic_config_file
+echo "MATLAB_COMMAND_V: $MATLAB_V" >> $acoustic_config_file
 
+echo "visual : True" >> $acoustic_config_file
+echo "addhtkheader: $addhtkheader" >> $acoustic_config_file
+echo "aam_tools_path: $aam_tools_path" >> $acoustic_config_file
+echo "aam_tools_extra_scripts: $aam_tools_extra_scripts" >> $acoustic_config_file
+echo "aam_model: $aam_model" >> $acoustic_config_file
 
 if [ "$Vocoder" == "STRAIGHT" ] 
 then
@@ -273,11 +281,12 @@ fi
 
 if [ "$Visual" == true ]
 then
-    echo "tex    : 53" >> $acoustic_config_file
-    echo "dtex    : 159" >> $acoustic_config_file
+    echo "visual : True" >> $acoustic_config_file
+    echo "texture    : 58" >> $acoustic_config_file
+    echo "dtexture    : 174" >> $acoustic_config_file
 
-    echo "sha    : 17" >> $acoustic_config_file
-    echo "dsha    : 51" >> $acoustic_config_file
+    echo "shape    : 9" >> $acoustic_config_file
+    echo "dshape    : 27" >> $acoustic_config_file
 fi
 
 echo "" >> $acoustic_config_file
@@ -311,8 +320,8 @@ fi
 echo "" >> $acoustic_config_file
 echo "[Architecture]" >> $acoustic_config_file
 
-echo "hidden_layer_size  : [1024, 1024, 1024, 1024, 1024, 1024]" >> $acoustic_config_file
-echo "hidden_layer_type  : ['TANH', 'TANH', 'TANH', 'TANH', 'TANH', 'TANH']" >> $acoustic_config_file
+echo "hidden_layer_size  : [1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024]" >> $acoustic_config_file
+echo "hidden_layer_type  : ['TANH', 'TANH', 'TANH', 'TANH', 'TANH', 'TANH', 'TANH', 'TANH']" >> $acoustic_config_file
 
 echo "#if RNN or sequential training is used, please set sequential_training to True." >> $acoustic_config_file
 echo "sequential_training : False" >> $acoustic_config_file
@@ -331,7 +340,9 @@ echo "training_epochs  : 25" >> $acoustic_config_file
 echo "" >> $acoustic_config_file
 echo "[Streams]" >> $acoustic_config_file
 echo "# which feature to be used in the output" >> $acoustic_config_file
-echo "output_features      : ['mgc', 'lf0', 'vuv', 'bap', 'sha', 'tex']" >> $acoustic_config_file
+echo "output_features      : ['mgc', 'lf0', 'vuv', 'bap', 'shape', 'texture']" >> $acoustic_config_file
+echo "gen_wav_features     : ['mgc', 'lf0', 'bap', 'shape', 'texture']" >> $acoustic_config_file
+echo "gen_face_features    : ['shape', 'texture']" >> $acoustic_config_file
 
 echo "" >> $acoustic_config_file
 echo "" >> $acoustic_config_file

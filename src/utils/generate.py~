@@ -242,7 +242,7 @@ def generate_wav(gen_dir, file_id_list, cfg):
             io_funcs.array_to_binary_file(enhanced_mgc, new_mgc_file_name) 
             
             mgc_file_name = files['mgc']+'_p_mgc'
-
+        
         if cfg.do_post_filtering and cfg.apply_GV:
             logger.critical('Both smoothing techniques together can\'t be applied!!\n' )
             raise
@@ -287,8 +287,6 @@ def generate_wav(gen_dir, file_id_list, cfg):
             # copied from hts
 
             size = os.path.getsize(files['f0'])
-            size = size/4
-
             straight_normalization = 1024.0 / ( 2200.0 * 32768.0 )
 
             spectralUpdateInterval = 1000.0 * cfg.shift / cfg.sr
@@ -326,12 +324,12 @@ def generate_wav(gen_dir, file_id_list, cfg):
             synth_straight_file = open(synth_straight_file_name, "w")
 
             bytes_per_frame_shape = cfg.shape_dim * 4
-            output_name_shape = base + '.shape_h'
+            output_name_shape = base + '.sha_h'
             run_process('/usr/bin/perl %s %d %d %d 9 %s > %s' % (cfg.addhtkheader, cfg.sr, cfg.shift, bytes_per_frame_shape, files['shape'], output_name_shape))
 
             bytes_per_frame_texture = cfg.texture_dim * 4
-            output_name_texture = base + '.texture_h'
-            run_process('/usr/bin/perl %s %d %d %d 9 %s > %s' % (cfg.addhtkheader, cfg.sr, cfg.shift, bytes_per_frame_texture, files['texture'], output_name_texture))
+            output_name_texture = base + '.tex_h'
+            run_process('/usr/bin/perl %s %d %d %d 9 %s > %s' % (cfg.addhtkheader, cfg.sr, cfg.shift, bytes_per_frame_texture, files['tex'], output_name_texture))
 
             synth_straight_file.write("cd %s;\n" % cfg.aam_tools_path)
             synth_straight_file.write("addAamPaths;\n")

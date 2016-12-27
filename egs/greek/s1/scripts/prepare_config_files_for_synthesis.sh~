@@ -203,7 +203,7 @@ echo "log_file: %(work)s/log/mylogfilename.log" >> $acoustic_config_file
 
 echo "" >> $acoustic_config_file
 echo "# where are my tools" >> $acoustic_config_file
-echo "sptk:  /usr/local/SPTK-3.9/bin" >> $acoustic_config_file
+echo "sptk:  /usr/local/bin" >> $acoustic_config_file
 echo "MATLAB_COMMAND: ${MATLAB}" >> $acoustic_config_file
 echo "MATLAB_COMMAND_V: ${MATLAB_V}" >> $acoustic_config_file
 
