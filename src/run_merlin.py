@@ -200,6 +200,14 @@ def train_DNN(train_xy_file_list, valid_xy_file_list, \
     (train_x_file_list, train_y_file_list) = train_xy_file_list
     (valid_x_file_list, valid_y_file_list) = valid_xy_file_list
 
+    logger.debug("AAA")
+    logger.debug(train_x_file_list)
+    logger.debug(len(train_x_file_list))
+    logger.debug(valid_x_file_list, )
+    logger.debug(len(valid_x_file_list))
+    logger.debug("AAA")
+
+
     logger.debug('Creating training   data provider')
     train_data_reader = ListDataProvider(x_file_list = train_x_file_list, y_file_list = train_y_file_list, 
                             n_ins = n_ins, n_outs = n_outs, buffer_size = buffer_size, sequential = sequential_training, shuffle = True)

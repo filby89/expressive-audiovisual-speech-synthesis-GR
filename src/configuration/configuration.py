@@ -421,6 +421,7 @@ class configuration(object):
             ('shape_ext'   , '.shape'     , 'Extensions', 'shape_ext'),
             ('texture_ext'   , '.texture'     , 'Extensions', 'texture_ext'),
             ('visual'   , False     , 'Paths', 'visual'),
+            ('audio'   , False     , 'Paths', 'audio'),
             ('addhtkheader'   , 'nothing'    , 'Paths', 'addhtkheader'),
             ('aam_tools_path'   , 'nothing'    , 'Paths', 'aam_tools_path'),
             ('aam_tools_extra_scripts'   , 'nothing'    , 'Paths', 'aam_tools_extra_scripts'),

@@ -101,6 +101,9 @@ echo "[Architecture]" >> $duration_config_file
 echo "hidden_layer_size  : [1024, 1024, 1024, 1024, 1024, 1024]" >> $duration_config_file
 echo "hidden_layer_type  : ['TANH', 'TANH', 'TANH', 'TANH', 'TANH', 'TANH']" >> $duration_config_file
 
+# echo "hidden_layer_size  : [256, 256, 256, 256]" >> $duration_config_file
+# echo "hidden_layer_type  : ['TANH', 'TANH', 'TANH', 'TANH']" >> $duration_config_file
+
 echo "#if RNN or sequential training is used, please set sequential_training to True." >> $duration_config_file
 echo "sequential_training : False" >> $duration_config_file
 echo "dropout_rate : 0.0" >> $duration_config_file
@@ -123,7 +126,7 @@ echo "output_features      : ['dur']" >> $duration_config_file
 echo "" >> $duration_config_file
 echo "" >> $duration_config_file
 echo "[Data]" >> $duration_config_file
-echo "train_file_number: ${Train}" >> $duration_config_file
+echo "train_file_number: 754" >> $duration_config_file
 echo "valid_file_number: ${Valid}" >> $duration_config_file
 echo "test_file_number : ${Test}" >> $duration_config_file
 echo "#buffer size of each block of data to" >> $duration_config_file
@@ -207,7 +210,21 @@ echo "sptk:  /usr/local/SPTK-3.9/bin" >> $acoustic_config_file
 echo "MATLAB_COMMAND: ${MATLAB}" >> $acoustic_config_file
 echo "MATLAB_COMMAND_V: ${MATLAB_V}" >> $acoustic_config_file
 
-echo "visual : True" >> $acoustic_config_file
+if [ "$Audio" == true ]
+then 
+    echo "audio : True" >> $acoustic_config_file
+else
+    echo "audio : False" >> $acoustic_config_file
+fi
+
+if [ "$Visual" == true ]
+then 
+    echo "visual : True" >> $acoustic_config_file
+else
+    echo "visual : False" >> $acoustic_config_file
+fi
+
+
 
 echo "addhtkheader: ${addhtkheader}" >> $acoustic_config_file
 echo "aam_tools_path: ${aam_tools_path}" >> $acoustic_config_file
@@ -301,7 +318,7 @@ echo "" >> $acoustic_config_file
 echo "[Waveform]" >> $acoustic_config_file
 
 echo "" >> $acoustic_config_file
-echo "test_synth_dir :  %(TOPLEVEL)s/experiments/${Voice}/test_synthesis/wav" >> $acoustic_config_file  
+echo "test_synth_dir :  %(TOPLEVEL)s/experiments/${Voice}/${test_synth_dir}" >> $acoustic_config_file  
 echo "vocoder_type : ${Vocoder}" >> $acoustic_config_file
 
 if [ "$SamplingFreq" == "16000" ]
@@ -329,8 +346,12 @@ fi
 echo "" >> $acoustic_config_file
 echo "[Architecture]" >> $acoustic_config_file
 
-echo "hidden_layer_size  : [1024, 1024, 1024, 1024, 1024, 1024]" >> $acoustic_config_file
-echo "hidden_layer_type  : ['TANH', 'TANH', 'TANH', 'TANH', 'TANH', 'TANH']" >> $acoustic_config_file
+# echo "hidden_layer_size  : [1024, 1024, 1024, 1024, 1024, 1024]" >> $acoustic_config_file
+# echo "hidden_layer_type  : ['TANH', 'TANH', 'TANH', 'TANH', 'TANH', 'TANH']" >> $acoustic_config_file
+
+
+echo "hidden_layer_size  : [2048, 2048, 2048, 2048]" >> $acoustic_config_file
+echo "hidden_layer_type  : ['TANH', 'TANH', 'TANH', 'TANH']" >> $acoustic_config_file
 
 echo "#if RNN or sequential training is used, please set sequential_training to True." >> $acoustic_config_file
 echo "sequential_training : False" >> $acoustic_config_file
@@ -349,11 +370,24 @@ echo "training_epochs  : 25" >> $acoustic_config_file
 echo "" >> $acoustic_config_file
 echo "[Streams]" >> $acoustic_config_file
 echo "# which feature to be used in the output" >> $acoustic_config_file
-echo "output_features      : ['mgc', 'lf0', 'vuv', 'bap', 'shape', 'texture']" >> $acoustic_config_file
-echo "gen_wav_features     : ['mgc', 'lf0', 'bap', 'shape', 'texture']" >> $acoustic_config_file
-echo "gen_face_features    : ['shape', 'texture']" >> $acoustic_config_file
+# echo "output_features      : ['mgc', 'lf0', 'vuv', 'bap', 'shape', 'texture']" >> $acoustic_config_file
+# echo "gen_wav_features     : ['mgc', 'lf0', 'bap', 'shape', 'texture']" >> $acoustic_config_file
+# echo "gen_face_features    : ['shape', 'texture']" >> $acoustic_config_file
 
 
+if [ "$Audio" == true ] && [ "$Visual" == true ]
+then 
+    echo "output_features      : ['mgc', 'lf0', 'vuv', 'bap', 'shape', 'texture']" >> $acoustic_config_file
+    echo "gen_wav_features     : ['mgc', 'lf0', 'bap', 'shape', 'texture']" >> $acoustic_config_file
+elif [ "$Audio" == true ] && [ "$Visual" == false ]
+then
+    echo "output_features      : ['mgc', 'lf0', 'vuv', 'bap']" >> $acoustic_config_file
+    echo "gen_wav_features     : ['mgc', 'lf0', 'bap']" >> $acoustic_config_file
+elif [ "$Audio" == false ] && [ "$Visual" == true ]
+then
+    echo "output_features      : ['shape', 'texture']" >> $acoustic_config_file
+    echo "gen_wav_features     : ['shape', 'texture']" >> $acoustic_config_file
+fi
 echo "" >> $acoustic_config_file
 echo "" >> $acoustic_config_file
 echo "[Data]" >> $acoustic_config_file

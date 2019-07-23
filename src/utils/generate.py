@@ -63,7 +63,7 @@ import logging
 def run_process(args,log=True):
 
     logger = logging.getLogger("subprocess")
-    
+    logger.debug("AAAAA")
     # a convenience function instead of calling subprocess directly
     # this is so that we can do some logging and catch exceptions
     
@@ -175,6 +175,11 @@ def generate_wav(gen_dir, file_id_list, cfg):
 
         logger.info('creating waveform for %4d of %4d: %s' % (counter,max_counter,filename) )
         counter=counter+1
+# added  to skip validation by filntisis
+        # if counter<11:
+        #     continue
+# end added
+
         base   = filename
         files = {'sp'  : base + cfg.sp_ext,
                  'mgc' : base + cfg.mgc_ext,
@@ -193,7 +198,7 @@ def generate_wav(gen_dir, file_id_list, cfg):
         os.chdir(gen_dir)
 
         ### post-filtering
-        if cfg.do_post_filtering:
+        if cfg.do_post_filtering and cfg.audio:
             line = "echo 1 1 "
             for i in range(2, cfg.mgc_dim):
                 line = line + str(pf_coef) + " "
@@ -228,7 +233,7 @@ def generate_wav(gen_dir, file_id_list, cfg):
 
             mgc_file_name = files['mgc']+'_p_mgc'
             
-        if (cfg.vocoder_type == "STRAIGHT" or cfg.vocoder_type == "STRAIGHT_M_TRIAL") and cfg.apply_GV:
+        if (cfg.vocoder_type == "STRAIGHT" or cfg.vocoder_type == "STRAIGHT_M_TRIAL") and cfg.apply_GV  and cfg.audio:
             gen_mgc, frame_number = io_funcs.load_binary_file_frame(mgc_file_name, cfg.mgc_dim)
 
             gen_mu  = np.reshape(np.mean(gen_mgc, axis=0), (-1, 1))
@@ -243,12 +248,12 @@ def generate_wav(gen_dir, file_id_list, cfg):
             
             mgc_file_name = files['mgc']+'_p_mgc'
 
-        if cfg.do_post_filtering and cfg.apply_GV:
+        if cfg.do_post_filtering and cfg.apply_GV and cfg.audio:
             logger.critical('Both smoothing techniques together can\'t be applied!!\n' )
             raise
 
         ###mgc to sp to wav
-        if cfg.vocoder_type == 'STRAIGHT':
+        if cfg.vocoder_type == 'STRAIGHT'  and cfg.audio:
             run_process('{mgc2sp} -a {alpha} -g 0 -m {order} -l {fl} -o 2 {mgc} > {sp}'
                         .format(mgc2sp=SPTK['MGC2SP'], alpha=cfg.fw_alpha, order=cfg.mgc_dim-1, fl=cfg.fl, mgc=mgc_file_name, sp=files['sp']))
             run_process('{sopr} -magic -1.0E+10 -EXP -MAGIC 0.0 {lf0} > {f0}'.format(sopr=SPTK['SOPR'], lf0=files['lf0'], f0=files['f0']))
@@ -269,7 +274,7 @@ def generate_wav(gen_dir, file_id_list, cfg):
         
         ###mgc to sp to wav
         # add for straight trial version (MATLAB)
-        if cfg.vocoder_type == 'STRAIGHT_M_TRIAL':
+        if cfg.vocoder_type == 'STRAIGHT_M_TRIAL'  and cfg.audio:
             run_process('{mgc2sp} -a {alpha} -g 0 -m {order} -l {fl} -o 2 {mgc} > {sp}'
                         .format(mgc2sp=SPTK['MGC2SP'], alpha=cfg.fw_alpha, order=cfg.mgc_dim-1, fl=cfg.fl, mgc=mgc_file_name, sp=files['sp']))
             run_process('{sopr} -magic -1.0E+10 -EXP -MAGIC 0.0 {lf0} > {f0}'.format(sopr=SPTK['SOPR'], lf0=files['lf0'], f0=files['f0']))
@@ -335,44 +340,48 @@ def generate_wav(gen_dir, file_id_list, cfg):
 
             synth_straight_file.write("cd %s;\n" % cfg.aam_tools_path)
             synth_straight_file.write("addAamPaths;\n")
+            # synth_straight_file.write("parpool(4);\n")
             synth_straight_file.write("addpath %s\n" % cfg.aam_tools_extra_scripts)
             synth_straight_file.write("params.num_sh = %d;\n" % cfg.shape_dim)
             synth_straight_file.write("params.num_te = %d;\n" % cfg.texture_dim)
             synth_straight_file.write("params.fps = %f;\n" % 29.97)
             synth_straight_file.write("figure('Visible','Off')\n")
             synth_straight_file.write("convert_to_vid_divided('%s', '%s', '%s', '%s', '%s', '%s', params);\n" % (cfg.aam_model, os.path.join(gen_dir, output_name_shape), os.path.join(gen_dir, output_name_texture), os.path.join(gen_dir, (base + '.wav')), os.path.join(gen_dir, (base + '.mkv')), gen_dir))
+
+            synth_straight_file.write("pause(1);\n")
             synth_straight_file.write("quit;\n")
 
             synth_straight_file.close()
 
-            run_process("%s < %s" % (cfg.MATLAB_COMMAND_V, synth_straight_file_name))
+            # run_process("%s < %s" % (cfg.MATLAB_COMMAND_V, synth_straight_file_name))
+            os.system("%s < %s" % (cfg.MATLAB_COMMAND_V, synth_straight_file_name))
 
             # no removerino
 #            run_process('rm -f {sp} {f0} {f0a} {ap}'
  #                       .format(sp=files['sp'],f0=files['f0'],f0a=files['f0']+'.a',ap=files['ap']))
   
-        elif cfg.vocoder_type == 'WORLD':        
+        # elif cfg.vocoder_type == 'WORLD':        
 
-            run_process('{sopr} -magic -1.0E+10 -EXP -MAGIC 0.0 {lf0} | {x2x} +fd > {f0}'.format(sopr=SPTK['SOPR'], lf0=files['lf0'], x2x=SPTK['X2X'], f0=files['f0']))        
+        #     run_process('{sopr} -magic -1.0E+10 -EXP -MAGIC 0.0 {lf0} | {x2x} +fd > {f0}'.format(sopr=SPTK['SOPR'], lf0=files['lf0'], x2x=SPTK['X2X'], f0=files['f0']))        
             
-            run_process('{sopr} -c 0 {bap} | {x2x} +fd > {ap}'.format(sopr=SPTK['SOPR'],bap=files['bap'],x2x=SPTK['X2X'],ap=files['ap']))
+        #     run_process('{sopr} -c 0 {bap} | {x2x} +fd > {ap}'.format(sopr=SPTK['SOPR'],bap=files['bap'],x2x=SPTK['X2X'],ap=files['ap']))
             
-            ### If using world v2, please comment above line and uncomment this
-            #run_process('{mgc2sp} -a {alpha} -g 0 -m {order} -l {fl} -o 0 {bap} | {sopr} -d 32768.0 -P | {x2x} +fd > {ap}'
-            #            .format(mgc2sp=SPTK['MGC2SP'], alpha=cfg.fw_alpha, order=cfg.bap_dim, fl=cfg.fl, bap=bap_file_name, sopr=SPTK['SOPR'], x2x=SPTK['X2X'], ap=files['ap']))
+        #     ### If using world v2, please comment above line and uncomment this
+        #     #run_process('{mgc2sp} -a {alpha} -g 0 -m {order} -l {fl} -o 0 {bap} | {sopr} -d 32768.0 -P | {x2x} +fd > {ap}'
+        #     #            .format(mgc2sp=SPTK['MGC2SP'], alpha=cfg.fw_alpha, order=cfg.bap_dim, fl=cfg.fl, bap=bap_file_name, sopr=SPTK['SOPR'], x2x=SPTK['X2X'], ap=files['ap']))
 
-            run_process('{mgc2sp} -a {alpha} -g 0 -m {order} -l {fl} -o 2 {mgc} | {sopr} -d 32768.0 -P | {x2x} +fd > {sp}'
-                        .format(mgc2sp=SPTK['MGC2SP'], alpha=cfg.fw_alpha, order=cfg.mgc_dim-1, fl=cfg.fl, mgc=mgc_file_name, sopr=SPTK['SOPR'], x2x=SPTK['X2X'], sp=files['sp']))
+        #     run_process('{mgc2sp} -a {alpha} -g 0 -m {order} -l {fl} -o 2 {mgc} | {sopr} -d 32768.0 -P | {x2x} +fd > {sp}'
+        #                 .format(mgc2sp=SPTK['MGC2SP'], alpha=cfg.fw_alpha, order=cfg.mgc_dim-1, fl=cfg.fl, mgc=mgc_file_name, sopr=SPTK['SOPR'], x2x=SPTK['X2X'], sp=files['sp']))
 
-            run_process('{synworld} {fl} {sr} {f0} {sp} {ap} {wav}'
-                         .format(synworld=WORLD['SYNTHESIS'], fl=cfg.fl, sr=cfg.sr, f0=files['f0'], sp=files['sp'], ap=files['ap'], wav=files['wav']))
+        #     run_process('{synworld} {fl} {sr} {f0} {sp} {ap} {wav}'
+        #                  .format(synworld=WORLD['SYNTHESIS'], fl=cfg.fl, sr=cfg.sr, f0=files['f0'], sp=files['sp'], ap=files['ap'], wav=files['wav']))
             
-            run_process('rm -f {ap} {sp} {f0}'.format(ap=files['ap'],sp=files['sp'],f0=files['f0']))
+        #     run_process('rm -f {ap} {sp} {f0}'.format(ap=files['ap'],sp=files['sp'],f0=files['f0']))
 
-        else:
+        # else:
         
-            logger.critical('The vocoder %s is not supported yet!\n' % cfg.vocoder_type )
-            raise
+        #     logger.critical('The vocoder %s is not supported yet!\n' % cfg.vocoder_type )
+        #     raise
         
         os.chdir(cur_dir)
 
