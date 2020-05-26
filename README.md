@@ -17,7 +17,6 @@ This code accompanies the paper [Video-realistic expressive audio-visual speech 
     ├── hts                    # Code to train an expressive audio-visual talking head. Modified from [HTS](http://hts.sp.nitech.ac.jp/)
     ├── merlin                 # Code to train a DNN-based expressive audio-visual talking head. Modified from [Merlin](https://github.com/CSTR-Edinburgh/merlin)
     ├── aam_model               # Code to synthesize the active appearance model from shape and texture features. 
-    ├── tools                   # Tools and utilities
     ├── LICENSE
     └── README.md
 
