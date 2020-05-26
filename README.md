@@ -4,11 +4,10 @@ This code accompanies the paper [Video-realistic expressive audio-visual speech 
 ](https://www.sciencedirect.com/science/article/pii/S0167639317300419). You can get the preprint in [ResearchGate](https://www.researchgate.net/publication/319415357_Video-realistic_expressive_audio-visual_speech_synthesis_for_the_Greek_language).
 
 
-| | |
+| | | 
 |:-------------------------:|:-------------------------:|
-|<img src="images/neutral.gif">  Neutral |  <img src="images/angry.gif"> Anger |
-|<img src="images/happy.gif">  Happiness |  <img src="images/sad.gif">| Sadness |
-
+|<img width="200" src="images/neutral.gif"> <br/> <b>Neutral</b> |  <img width="200" src="images/angry.gif"> <br/> <b>Angry</b> |
+|<img width="200" src="images/happy.gif"> <br/> <b>Happy</b> |  <img width="200" src="images/sad.gif"> <br/> <b>Sad</b>|
 
 
 ## Project Structure
