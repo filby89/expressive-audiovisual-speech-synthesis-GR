@@ -91,7 +91,7 @@ This will take a lot of time (up to 5-6 hours) according to your system specs. I
 The code for HMM adaptation and interpolation is missing. Maybe I will add it at some time but it is currently not in my plans (it is old, buggy and a hassle to package).
 
 ### AAM training
-Same with Adaptation and Interpolation, the code to train the AAM model from scratch is not provided. If you want the hand-labelled images and landmarks I used to train it you can e-mail. I used [AAMtools](http://cvsp.cs.ntua.gr/software/AAMtools/).
+Same with Adaptation and Interpolation, the code to train the AAM model from scratch is not provided. If you want the hand-labelled images and landmarks I used to train it you can e-mail. I used [AAMtools](http://cvsp.cs.ntua.gr/software/AAMtools/) from George Papandreou.
 
 ### Unit selection
 The code for the unit selection part of the paper is not available (Commercial software from [Innoetics](https://www.innoetics.com/)).
@@ -102,7 +102,7 @@ The code for the unit selection part of the paper is not available (Commercial s
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the GPL v3 License - see the [LICENSE](LICENSE) file for details
 
 ## Acknowledgments
 Special thanks to
