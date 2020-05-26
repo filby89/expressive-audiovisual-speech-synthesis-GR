@@ -98,11 +98,11 @@ The code for the unit selection part of the paper is not available (Commercial s
 
 ## Author
 
-* **Panagiotis P. Filntisis** - [filby](https://github.com/filby89)
+* [Panagiotis P. Filntisis](https://github.com/filby89)
 
 ## Acknowledgments
 Special thanks to
-* Nassos Katsamanis (https://github.com/nassosoassos) for his guidance during this project and initial codebase.
+* [Nassos Katsamanis](https://github.com/nassosoassos) for his guidance during this project and initial codebase.
 * Pyrros Tsiakoulis for his help in the unit selection part of the paper.
 * George Papandreou for his code on active appearance models.
 * Dimitra Tarousi for the recording of the CVSP-EAV database.
