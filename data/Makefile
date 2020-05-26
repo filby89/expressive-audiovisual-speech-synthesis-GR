@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
 # ----------------- Edit these variables to represent your system - required ----------------- #
-BASE_DIR = "/kalymnos_home/filby/workspace/hts-audiovisual-synthesis"
+BASE_DIR = "/kalymnos_home/filby/workspace/hts/expressive-audiovisual-speech-synthesis-GR"
 DB_DIR = /gpu-data2/filby/EAVTTS/CVSP_EAV
 
 INSTALLED_SPTK_VERSION = "/usr/local/bin"
@@ -202,7 +202,8 @@ MFCCDIR = mfcc/$(SPEAKER)/$(EMOTION)
 
 all: features labels
 
-features: straight mgc lf0 bap cmp
+
+features: mgc lf0 bap cmp
 
 labels: mlf list scp 
 

@@ -1,6 +1,7 @@
 *.pyc
 *.o
 *.log
+*.mexa64
 aam_model/model/all_emotions.mat
 merlin/egs/greek/s1/experiments
 merlin/egs/greek/s1/scp

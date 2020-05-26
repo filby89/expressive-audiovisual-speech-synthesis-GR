@@ -27,7 +27,7 @@ foreach $set (@SET) {
 # File locations =========================
 # data directory
 $datdir = "$prjdir/data";
-$synthesisdir = "$prjdir/hts-training";
+$synthesisdir = "$prjdir/hts";
 
 # data location file
 $scp{'trn'} = "$datdir/scp/$spkr/$emotion/$dataversion/train.scp";
@@ -242,8 +242,8 @@ if ($MKEMV) {
       # mkdir "$mapmmf{$set}",  0755;
    }
    
-   shell("cp $prjdir/hts-training/Configuration.pm $synthesisdir/configs/qst${qnum}/ver${ver}/");
-   shell("cp $prjdir/hts-training/Training.pl $synthesisdir/configs/qst${qnum}/ver${ver}/");
+   shell("cp $prjdir/hts/Configuration.pm $synthesisdir/configs/qst${qnum}/ver${ver}/");
+   shell("cp $prjdir/hts/Training.pl $synthesisdir/configs/qst${qnum}/ver${ver}/");
 
    # make config files
    make_config();

@@ -4,7 +4,7 @@
 
 # ============================== Edit these variables to represent your system - required ============================== #
 
-$prjdir = '/kalymnos_home/filby/workspace/hts-audiovisual-synthesis'; # one dir above
+$prjdir = '/kalymnos_home/filby/workspace/expressive-audiovisual-speech-synthesis-GR'; # one dir above
 
 # MATLAB & STRAIGHT
 $MATLAB   = '/usr/local/MATLAB/R2015a/bin/matlab -nodisplay -nosplash -nojvm';
@@ -14,6 +14,8 @@ $MATLABV  = '/usr/local/MATLAB/R2015a/bin/matlab';
 $HTS_PATH = '/usr/local/HTS-2.3/bin';
 
 $SPTK_PATH = "/usr/local/bin";
+
+$emotion = "neutral";
 
 $CVSP_EAV_DIR = "/gpu-data2/filby/EAVTTS/CVSP_EAV";
 $SHAPE_DIR = "$CVSP_EAV_DIR/shape/$spkr/$emotion/";
@@ -39,7 +41,6 @@ $usestraight = '1';
 $useVideo = '1';
 
 # --- data & training versions and paths --- #
-$emotion = "happy";
 
 $mgcvsize = $ordr{'mgc'}-1;
 $bapvsize = $ordr{'bap'}-1;
