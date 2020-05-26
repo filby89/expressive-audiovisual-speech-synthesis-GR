@@ -44,11 +44,16 @@ This code accompanies the paper [Video-realistic expressive audio-visual speech 
 make
 ``` 
 
-in MATLAB.
 
 ### Feature Extraction
 
 * In the `data/` subdirectory edit the Makefile to point to your system paths (The section you need to edit is marked with comments) and desired feature types (e.g., emotion) and outputs.
+
+* If you did not download the STRAIGHT features you need to create them:
+```bash
+make straight
+```
+
 * Then, extract the mel-generalized cepstral coefficients, the pitch, and the band-aperiodicy components:
 
 ```bash
@@ -57,6 +62,7 @@ make features
 
 
 ### Training the HMM-based expressive audiovisual speech synthesis talking head
+* Copy the folder `hts_style_labels` from the CVSP-EAV dataset into the `data/` subdirectory and rename the folder to just `labels`.
 * In the `data/` subdirectory create some additional files needed for training by running:
 
 ```bash
