@@ -1,0 +1,50 @@
+# General
+MLAB       = /usr/local/MATLAB/R2015a
+OUT_MEX    = ${CURDIR}
+COMMON     = ${CURDIR}
+COMMON_MEX = ${CURDIR}
+
+# Compile
+CC         = gcc
+CXX        = g++
+CPPFLAGS   = -m64
+#CXXFLAGS   = -O3 -Wall -I/usr/lib/i386-linux-gnu -I$(MLAB)/extern/include -I$(COMMON) -I$(COMMON_MEX) -I/opt/local/include -I/usr/X11/include 
+CXXFLAGS   = -O3 -Wall -I/usr/lib/x86_64-linux-gnu -I$(MLAB)/extern/include -I$(COMMON) -I$(COMMON_MEX) -I/opt/local/include -I/usr/X11/include -fPIC
+# -Winline -pedantic
+#CXXFLAGS   = -O3 -Wall -DmwSize=int -I$(MLAB)/extern/include -I$(COMMON) -I$(COMMON_MEX) # -Winline -pedantic
+#CXXFLAGS   = -g -Wall -DmwSize=int -I$(MLAB)/extern/include -I$(COMMON) -I$(COMMON_MEX) # -Winline
+
+# Link
+#MXSFX      = `$(MLAB)/bin/mexext`
+#MXSFX      = mexglx
+MXSFX = mexa64
+MEX        = $(MLAB)/bin/mex
+MFLAGS     = -cxx
+#MFLAGS     = -cxx -g
+#LOADLIBES  = -lgfortran -lglut -lGLEW -lpthread
+LOADLIBES  = -lglut -lGLEW -lpthread
+#LOADLIBES  =  -lgfortran
+LINK_MEX   = -L$(MLAB)/extern/lib -L/opt/local/lib -L/usr/X11/lib
+
+# New implicit make rule
+
+%.$(MXSFX) : %.o
+	$(MEX) $(MFLAGS) $(LINK_MEX) $(LOADLIBES) $^ -output $@ -outdir $(OUT_MEX)
+
+## Purify related flags
+#PFLAGS  = -messages=first -leaks-at-exit=yes
+#PDIR    = `purify -print-home-dir`
+#PURIFY  = purify $(PFLAGS)
+#
+#%.$(MXSFX) : %.o
+#	$(CC) -c -I$(MLAB)/extern/include -I$(MLAB)/simulink/include -DMATLAB_MEX_FILE -fPIC -ansi -D_GNU_SOURCE -pthread -fexceptions -m32  -g $(MLAB)/extern/src/mexversion.c -o $(OUT_MEX)/mexversion.o
+#	$(PURIFY) $(CXX) -g -pthread -shared -m32 -Wl,--version-script,$(MLAB)/extern/lib/glnx86/mexFunction.map -o $(OUT_MEX)/$@ $^ $(OUT_MEX)/mexversion.o -L$(MLAB)/extern/lib -lg2c -Wl,-rpath-link,$(MLAB)/bin/glnx86 -L$(MLAB)/bin/glnx86 -lmx -lmex -lmat -lm -lm
+
+
+##############
+# Note the following implicit make rules (see `info make` and `make -p | less`)
+#$(CC) -c $(CPPFLAGS) $(CFLAGS)   (c-programs)
+#$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) (c++-programs)
+#$(CC) $(LDFLAGS) N.o $(LOADLIBES) $(LDLIBS)
+%.o : %.c
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@

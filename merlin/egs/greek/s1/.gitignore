@@ -1,0 +1,12 @@
+save/
+logs/
+gen/
+gen-lab/
+conf/experiment_confs/
+experiments/
+notes
+test_sad/
+test_happy/
+test_neutral/
+test_angry/
+test_angry2/
