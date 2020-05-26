@@ -4,11 +4,10 @@ This code accompanies the paper [Video-realistic expressive audio-visual speech 
 ](https://www.sciencedirect.com/science/article/pii/S0167639317300419). You can get the preprint in [ResearchGate](https://www.researchgate.net/publication/319415357_Video-realistic_expressive_audio-visual_speech_synthesis_for_the_Greek_language).
 
 
-| | |
+| | | 
 |:-------------------------:|:-------------------------:|
-|<img width="1604" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/297678/29892310-03e92256-8d83-11e7-9b58-986dcb6f702e.png">  Neutral |  <img width="1604" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/297678/29892310-03e92256-8d83-11e7-9b58-986dcb6f702e.png"> Anger |<img width="1604" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/297678/29892310-03e92256-8d83-11e7-9b58-986dcb6f702e.png"> |
-|<img width="1604" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/297678/29892310-03e92256-8d83-11e7-9b58-986dcb6f702e.png">  Happiness |  <img width="1604" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/297678/29892310-03e92256-8d83-11e7-9b58-986dcb6f702e.png">| Sadness <img width="1604" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/297678/29892310-03e92256-8d83-11e7-9b58-986dcb6f702e.png">  |
-
+|<img width="200" src="images/neutral.gif"> <br/> <b>Neutral</b> |  <img width="200" src="images/angry.gif"> <br/> <b>Angry</b> |
+|<img width="200" src="images/happy.gif"> <br/> <b>Happy</b> |  <img width="200" src="images/sad.gif"> <br/> <b>Sad</b>|
 
 
 ## Project Structure
@@ -18,7 +17,6 @@ This code accompanies the paper [Video-realistic expressive audio-visual speech 
     ├── hts                    # Code to train an expressive audio-visual talking head. Modified from [HTS](http://hts.sp.nitech.ac.jp/)
     ├── merlin                 # Code to train a DNN-based expressive audio-visual talking head. Modified from [Merlin](https://github.com/CSTR-Edinburgh/merlin)
     ├── aam_model               # Code to synthesize the active appearance model from shape and texture features. 
-    ├── tools                   # Tools and utilities
     ├── LICENSE
     └── README.md
 
@@ -45,11 +43,16 @@ This code accompanies the paper [Video-realistic expressive audio-visual speech 
 make
 ``` 
 
-in MATLAB.
 
 ### Feature Extraction
 
 * In the `data/` subdirectory edit the Makefile to point to your system paths (The section you need to edit is marked with comments) and desired feature types (e.g., emotion) and outputs.
+
+* If you did not download the STRAIGHT features you need to create them:
+```bash
+make straight
+```
+
 * Then, extract the mel-generalized cepstral coefficients, the pitch, and the band-aperiodicy components:
 
 ```bash
@@ -58,6 +61,7 @@ make features
 
 
 ### Training the HMM-based expressive audiovisual speech synthesis talking head
+* Copy the folder `hts_style_labels` from the CVSP-EAV dataset into the `data/` subdirectory and rename the folder to just `labels`.
 * In the `data/` subdirectory create some additional files needed for training by running:
 
 ```bash
