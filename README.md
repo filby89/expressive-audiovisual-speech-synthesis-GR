@@ -1,7 +1,6 @@
 # Expressive Audio-Visual Talking head in Greek
 
-This code accompanies the paper [Video-realistic expressive audio-visual speech synthesis for the Greek language
-](https://www.sciencedirect.com/science/article/pii/S0167639317300419). You can get the preprint in [ResearchGate](https://www.researchgate.net/publication/319415357_Video-realistic_expressive_audio-visual_speech_synthesis_for_the_Greek_language).
+This code accompanies the paper [Video-realistic expressive audio-visual speech synthesis for the Greek language](https://www.sciencedirect.com/science/article/pii/S0167639317300419). You can get the preprint in [ResearchGate](https://www.researchgate.net/publication/319415357_Video-realistic_expressive_audio-visual_speech_synthesis_for_the_Greek_language).
 
 | | | | |
 |:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|
