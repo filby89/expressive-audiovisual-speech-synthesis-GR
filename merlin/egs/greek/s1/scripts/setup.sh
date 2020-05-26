@@ -40,11 +40,11 @@ mkdir -p ${acoustic_dir}/data/lf0
 
 # duration dir
 cp -r ${project_dir}/data/labels/dt/${emotion}/full/* ${duration_dir}/data/label_phone_align/
-cp -r ${db_dir}/state_align_labels/dt/${emotion}/label_state_align/* ${duration_dir}/data/label_state_align/
+cp -r ${db_dir}/state_forced_alignment_labels/dt/${emotion}/* ${duration_dir}/data/label_state_align/
 
 # acoustic dir
 cp -r ${project_dir}/data/labels/dt/${emotion}/full/* ${acoustic_dir}/data/label_phone_align/
-cp -r ${db_dir}/state_align_labels/dt/${emotion}/label_state_align/* ${acoustic_dir}/data/label_state_align/
+cp -r ${db_dir}/state_forced_alignment_labels/dt/${emotion}/* ${acoustic_dir}/data/label_state_align/
 
 cp -r ${project_dir}/data/speechfeatures/dt/${emotion}/${speechfeatures_version}/bap ${acoustic_dir}/data
 cp -r ${project_dir}/data/speechfeatures/dt/${emotion}/${speechfeatures_version}/mgc ${acoustic_dir}/data

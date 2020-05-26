@@ -3,12 +3,12 @@
 This code accompanies the paper [Video-realistic expressive audio-visual speech synthesis for the Greek language
 ](https://www.sciencedirect.com/science/article/pii/S0167639317300419). You can get the preprint in [ResearchGate](https://www.researchgate.net/publication/319415357_Video-realistic_expressive_audio-visual_speech_synthesis_for_the_Greek_language).
 
-
+<center>
 | | | 
 |:-------------------------:|:-------------------------:|
 |<img width="200" src="images/neutral.gif"> <br/> <b>Neutral</b> |  <img width="200" src="images/angry.gif"> <br/> <b>Angry</b> |
 |<img width="200" src="images/happy.gif"> <br/> <b>Happy</b> |  <img width="200" src="images/sad.gif"> <br/> <b>Sad</b>|
-
+</center>
 
 ## Project Structure
 
@@ -31,7 +31,7 @@ This code accompanies the paper [Video-realistic expressive audio-visual speech 
 
 ### Installation
 
-* Download the CVSP-EAV dataset from [here](https://pithos.okeanos.grnet.gr/public/CEko2ZrurDdUJw7SF1hRC6) and extract it. If you want to skip creating the STRAIGHT waveform features (next step) you can download them from [here]() (Warning: size is 112GB).
+* Download the CVSP-EAV dataset from [here](https://pithos.okeanos.grnet.gr/public/gUB3DOoM7qvLGahk4i7pw1) and extract it. 
 
 * Put the aam-model downloaded from the dataset (file all_emotions.mat) in the `aam_model/model/` directory.
 
@@ -48,10 +48,12 @@ make
 
 * In the `data/` subdirectory edit the Makefile to point to your system paths (The section you need to edit is marked with comments) and desired feature types (e.g., emotion) and outputs.
 
-* If you did not download the STRAIGHT features you need to create them:
+* Then, you need to extract STRAIGHT waveform features:
 ```bash
 make straight
 ```
+
+This step takes a lot of time, and the resulting features have a total size of around \~110GB.
 
 * Then, extract the mel-generalized cepstral coefficients, the pitch, and the band-aperiodicy components:
 
