@@ -96,7 +96,7 @@ Same with Adaptation and Interpolation, the code to train the AAM model from scr
 ### Unit selection
 The code for the unit selection part of the paper is not available (Commercial software from [Innoetics](https://www.innoetics.com/)).
 
-## Authors
+## Project Author
 
 * **Panagiotis P. Filntisis** - [filby](https://github.com/filby89)
 
@@ -106,7 +106,7 @@ This project is licensed under the GPL v3 License - see the [LICENSE](LICENSE) f
 
 ## Acknowledgments
 Special thanks to
-* Nassos Katsamanis (https://github.com/nassosoassos) for his guidance during this project.
-* George Papandreou for his code on active appearance models.
+* Nassos Katsamanis (https://github.com/nassosoassos) for his guidance during this project and initial codebase.
 * Pyrros Tsiakoulis for his help in the unit selection part of the paper.
+* George Papandreou for his code on active appearance models.
 * Dimitra Tarousi for the recording of the CVSP-EAV database.
