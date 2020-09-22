@@ -27,7 +27,7 @@ This code accompanies the paper [Video-realistic expressive audio-visual speech 
 
 ### Installation
 
-* Download the CVSP-EAV dataset from [here](https://ntuagr-my.sharepoint.com/:u:/g/personal/filby_ntua_gr/EemU04DzhPlLtqWintj_VCEB7kQsOm-A87AKkFEW17P7mQ?e=FXOJIa) and extract it. 
+* ~~Download the CVSP-EAV dataset from [here](https://ntuagr-my.sharepoint.com/:u:/g/personal/filby_ntua_gr/EemU04DzhPlLtqWintj_VCEB7kQsOm-A87AKkFEW17P7mQ?e=FXOJIa) and extract it.~~ If you wish to download the CVSP EAV dataset, email me at filby[at]central.ntua.gr
 
 * Put the aam-model downloaded from the dataset (file all_emotions.mat) in the `aam_model/model/` directory.
 
